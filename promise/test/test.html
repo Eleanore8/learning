@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="../lib/my-promise.js"></script>
+    <script>
+        // const p = new MyPromise((resolve,reject) => {
+        //     setTimeout(() => {
+        //         resolve(1);
+        //     });
+        // }).then((val) => {
+        //     console.log('then1', val);
+        //     return new MyPromise((resolve,reject) => {
+        //         resolve(8);
+        //     });
+        // }, (reject) => {
+        //     console.log('reject1', reject);
+        // }).then((val) => {
+        //     console.log('then2', val);
+        // }, (reject) => {
+        //     console.log('reject2', reject);
+        // });
+
+        const p1 = MyPromise.resolve(1);
+        const p2 = MyPromise.resolve(MyPromise.resolve(2));
+        const p3 = MyPromise.resolve(MyPromise.reject(3));
+        const p4 = new MyPromise((resolve) => {
+            setTimeout(() => {
+                resolve(4);
+            }, 1000);
+        });
+
+        const p5 = MyPromise.reject(5);
+
+        // p1.then(val => {console.log(val)});
+        // p2.then(val => {console.log(val)});
+        // p3.catch(val => {console.log(val)});
+
+        const pAll1 = MyPromise.all([p1, 55, p2, p3]);
+        pAll1.then(val => {console.log('pAll1 then', val)});
+        pAll1.catch(reason => {console.log('pAll1 catch', reason)});
+
+        const pAll2 = MyPromise.all([p4, 22, p1, p2]);
+        pAll2.then(val => {console.log('pAll2 then', val)});
+        pAll2.catch(reason => {console.log('pAll2 catch', reason)});
+
+        const pRace1 = MyPromise.race([p5, p2]);
+        pRace1.then(val => {console.log('pRace1 then', val)});
+        pRace1.catch(reason => {console.log('pRace1 catch', reason)});
+
+        const pRace2 = MyPromise.race([p4, p2, p3]);
+        pRace2.then(val => {console.log('pRace2 then', val)});
+        pRace2.catch(reason => {console.log('pRace2 catch', reason)});
+    </script>
+</body>
+</html>
